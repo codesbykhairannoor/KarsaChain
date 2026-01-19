@@ -126,7 +126,7 @@ export default function HomePage() {
                       </span>
                    </h2>
                    <p className="text-slate-400 text-lg mb-8">
-                      Kami tidak menggunakan database biasa. Semua tercatat di ledger terdesentralisasi yang tidak bisa dimatikan oleh siapa pun.
+                     {t.sec1desc}
                    </p>
                    
                    <div className="space-y-6">
