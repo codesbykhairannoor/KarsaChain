@@ -76,6 +76,18 @@ export const translations = {
     netActive: "Jaringan Sepolia Aktif",
     gasTip: "Setiap upload membutuhkan sedikit gas fee Sepolia ETH. Pastikan saldo wallet cukup.",
 
+    // Tambahkan di dalam objek id dan en masing-masing
+loadingBlockchain: "Memanggil data dari Blockchain...",
+noAssets: "Belum ada aset. Upload dulu di sebelah kiri, Bos!",
+viewOriginal: "Lihat File Asli",
+refresh: "Segarkan",
+
+publicTitle: "Vault Publik",
+    publicDesc: "Menampilkan arsip abadi yang tersimpan di KarsaChain. Aset ini bersifat permanen dan tidak dapat diubah.",
+    backHome: "Kembali ke Beranda",
+
+ 
+
 
   },
   en: {
@@ -153,5 +165,14 @@ export const translations = {
     hello: "Hello, Keeper",
     netActive: "Sepolia Network Active",
     gasTip: "Every upload requires a small Sepolia ETH gas fee. Ensure you have sufficient balance.",
+
+    loadingBlockchain: "Fetching data from Blockchain...",
+noAssets: "No assets yet. Start uploading on the left, Boss!",
+viewOriginal: " View Original File",
+refresh: "Refresh",
+
+publicTitle: "Public Vault",
+    publicDesc: "Displaying eternal archives stored on KarsaChain. These assets are permanent and immutable.",
+    backHome: "Back to Home",
   }
 };
