@@ -1,3 +1,6 @@
+import { isIP } from "net";
+import { simulateTransaction } from "thirdweb";
+
 export const translations = {
   id: {
     welcome: "Vault Masa Depan.",
@@ -89,33 +92,33 @@ publicTitle: "Vault Publik",
     backHome: "Kembali ke Beranda",
 
     guideTitle: "Tutorial Lengkap: Dari Nol Sampai Upload",
-    guideSub: "Ikuti 5 langkah ini buat dapetin saldo gratis dan mulai mengabadikan dokumen lo.",
+    guideSub: "Ikuti 6 langkah ini buat dapetin saldo gratis dan mulai mengabadikan dokumen kamu.",
 
     // STEP 1: LOGIN & COPY
-    step11Title: "Langkah 1: Ambil 'Nomor Rekening' Lo",
-    step11Desc: "Login pakai Google. Setelah masuk, klik tombol Profil di pojok kanan atas. Klik ikon 'Copy' di sebelah kode yang berawalan 0x... (Itu alamat wallet lo).",
+    step11Title: "Langkah 1: Ambil 'Nomor Rekening di Profile' kamu",
+    step11Desc: "Login pakai Google atau Wallet Crypto Kamu. Setelah masuk, klik tombol Profil di pojok kanan atas. Klik ikon 'Copy' di sebelah kode yang berawalan 0x... (Itu alamat wallet kamu).",
     
     // STEP 2: BUKA FAUCET
-    step22Title: "Langkah 2: Buka Link 'Pom Bensin' (Faucet)",
+    step22Title: "Langkah 2&3: Buka Link 'Pom Bensin' (Faucet)",
     step22Desc: "Kita butuh ETH Sepolia (Uang mainan) buat bayar biaya upload. Klik tombol di bawah buat buka website Faucet Google.",
     step22Btn: "Buka Google Cloud Faucet",
 
     // STEP 3: ISI & KLAIM
     step33Title: "Langkah 3: Paste & Request",
-    step33Desc: "Di website Faucet tadi: (1) Ubah jaringan ke 'Sepolia', (2) Tempel/Paste alamat 0x... lo di kolom alamat, (3) Klik 'Receive ETH'. Tunggu sampai muncul status sukses.",
+    step33Desc: "Di website Faucet tadi: (1) Ubah jaringan ke 'Sepolia', (2) Tempel/Paste alamat 0x... kamu di kolom alamat, (3) Klik 'Receive ETH'. Tunggu sampai muncul status sukses.",
 
     // STEP 4: UPLOAD
-    step4Title: "Langkah 4: Upload File Lo",
-    step4Desc: "Balik ke sini. Cek saldo lo pasti udah nambah. Sekarang pergi ke Dashboard, pilih file gambar/dokumen, kasih judul, dan klik 'Upload'.",
+    step4Title: "Langkah 4: Upload File kamu",
+    step4Desc: "Balik ke sini. Cek saldo kamu pasti udah nambah. Sekarang pergi ke Dashboard, pilih file gambar/dokumen, kasih judul, dan klik 'Upload'.",
 
     // STEP 5: CEK BUKTI (YANG DIMINTA BRO)
     step5Title: "Langkah 5: Cara Lihat Bukti & Link",
-    step5Desc: "Setelah sukses upload, akan muncul 'Transaction Hash'. Klik link itu, lo bakal dibawa ke Etherscan. Di sana ada bukti tanggal, jam, dan pemilik file yang GAK BISA DIEDIT siapapun. Itu bukti sah lo.",
+    step5Desc: "Setelah sukses upload, akan muncul 'Transaction Hash'. Klik link itu, kamu  bakal dibawa ke Etherscan. Di sana ada bukti tanggal, jam, dan pemilik file yang GAK BISA DIEDIT siapapun. Itu bukti sah kamu.",
     
-    guideCta: "Paham! Bawa Gue ke Dashboard",
+    guideCta: "Paham! Bawa Saya ke Dashboard",
 
      step111Title: "Langkah 01",
-    step222Title : "Langkah 02",
+    step222Title : "Langkah 02 & 03",
     step333Title : "Langkah 03",
     step444Title : "Langkah 04",
     step555Title : "Langkah 05",
@@ -123,7 +126,44 @@ publicTitle: "Vault Publik",
     step6Title: "Langkah 6: Link Portofolio Pribadi",
     step6Desc: "Ini fitur rahasia! Kamu punya halaman profil publik sendiri. Cukup gabungkan link website ini dengan alamat wallet kamu. Cocok buat pamerin semua karya/sertifikat kamu dalam satu folder.",
  
+// --- HALAMAN GUIDE (HEADER) ---
+   
 
+    // --- STEP 1 ---
+    step1Label: "Langkah 01", // Label di samping kiri
+  
+    simProfile: "Simulasi Tampilan Profil:", // Teks kecil simulasi
+
+    // --- STEP 2 & 3 (FAUCET) ---
+    step2Label: "Langkah 02 & 03",
+    step2MobileTitle: "Isi Saldo (Faucet)",
+    step2Btn: "Buka Google Cloud Faucet",
+
+    // --- STEP 4 (UPLOAD) ---
+    step4Label: "Langkah 04",
+    statusReady: "Status: Siap Upload", // Teks status
+rumusLink: "Rumus Link Kamu:",
+
+    
+
+    // --- STEP 5 (VERIFIKASI) ---
+    step5Label: "Langkah 05 (Penting)",
+simulasip: "Simulasi Tampilan Profil:",
+isiSaldo3: "Isi Saldo (Faucet)",
+    labelTxHash: "Transaction Hash:",
+    labelStatus: "Status:",
+    statusSuccess: "Sukses",
+    labelViewExplorer: "Lihat di Explorer:",
+    labelEtherscan: "Etherscan",
+
+    // --- STEP 6 (BONUS) ---
+    step6Label: "Langkah 06 (Bonus)",
+    
+    
+    // Teks Simulasi Step 6
+    simUrlFormula: "Rumus Link Kamu:",
+    simUrlExample: "*Contoh: karsa-chain.vercel.app/",
+    alamatKamu: "0xD343...ALAMAT_KAMU"
 
   },
   en: {
@@ -186,6 +226,8 @@ publicTitle: "Vault Publik",
     stat1: "Blocks Verified",
     stat2: "Active Nodes",
     stat3: "Encrypted Assets",
+    alamatKamu: "0xD343...YOUR_ADDRESS",
+
 
     // Categories
     catTitle: "What is Stored Here?",
@@ -215,18 +257,18 @@ publicTitle: "Public Vault",
     backHome: "Back to Home",
 
     guideTitle: "Complete Tutorial: Zero to Hero",
-    guideSub: "Follow these 5 steps to get free funds and start eternalizing your documents.",
+    guideSub: "Follow these 6 steps to get free funds and start eternalizing your documents.",
 
     step11Title: "Step 1: Get Your 'Account Number'",
-    step11Desc: "Login with Google. Click Profile on top right. Click the 'Copy' icon next to the code starting with 0x... (That is your wallet address).",
+    step11Desc: "Login with Google Or Connect Wallet. Click Profile on top right. Click the 'Copy' icon next to the code starting with 0x... (That is your wallet address).",
 
     step111Title: "Step 01",
-    step222title : "Step 02",
-    step333title : "Step 03",
-    step444title : "Step 04",
-    step555title : "Step 05",
+    step222Title : "Step 02 & 03",
+    step333Title : "Step 03",
+    step444Title : "Step 04",
+    step555Title : "Step 05",
 
-    step22Title: "Step 2: Open the 'Fuel Station' (Faucet)",
+    step22Title: "Step 2&3: Open the 'Fuel Station' (Faucet)",
     step22Desc: "We need Sepolia ETH (Test money) to pay upload fees. Click the button below to open the Google Faucet website.",
     step22Btn: "Open Google Cloud Faucet",
 
@@ -235,12 +277,16 @@ publicTitle: "Public Vault",
 
     step4Title: "Step 4: Upload Your File",
     step4Desc: "Come back here. Your balance should be updated. Go to Dashboard, pick a file, give it a title, and click 'Upload'.",
-
+simulasip: "Simulation of Profile Display:",
     step6Title: "Step 6: Your Personal Portfolio Link",
     step6Desc: "This is a secret feature! You have your own public profile page. Just combine this website link with your wallet address. Perfect for showcasing all your works/certificates in one folder.",
+    step6Label: "Step 06 (Bonus)",
 
     step5Title: "Step 5: How to Verify Proof",
     step5Desc: "After upload, a 'Transaction Hash' will appear. Click it to open Etherscan. There you see the timestamp and ownership proof that CANNOT BE EDITED by anyone. That is your valid proof.",
+isiSaldo3: "Fill Balance (Faucet)",
+    statusReady: "Ready to Upload", // Teks status
+rumusLink: "Your Link Formula:",
     
     guideCta: "Got it! Take me to Dashboard",
   }

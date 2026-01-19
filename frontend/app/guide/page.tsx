@@ -59,7 +59,7 @@ export default function GuidePage() {
                 
                 {/* Visual Aid: Simulasi Tombol Copy */}
                 <div className="bg-[#111] p-4 rounded-xl border border-slate-800">
-                    <div className="text-xs text-slate-500 mb-1">Simulasi Tampilan Profil:</div>
+                    <div className="text-xs text-slate-500 mb-1">{t.simulasip}</div>
                     <div className="flex items-center justify-between bg-black p-3 rounded border border-slate-700">
                         <span className="font-mono text-sm text-slate-300">0x71C...9A2</span>
                         <Copy size={16} className="text-blue-500 animate-pulse" />
@@ -72,12 +72,12 @@ export default function GuidePage() {
           <div className="md:flex gap-8 group">
              <div className="hidden md:flex flex-col items-end w-1/3 pt-2 pr-8 border-r-2 border-slate-800 relative">
                 <div className="absolute -right-[9px] top-2 w-4 h-4 bg-green-500 rounded-full ring-4 ring-[#050505]" />
-                <h3 className="text-xl font-bold text-green-400">Langkah 02 & 03</h3>
+                <h3 className="text-xl font-bold text-green-400">{t.step222Title}</h3>
              </div>
              <div className="w-full md:w-2/3">
                 <div className="flex items-center gap-3 mb-3 md:hidden">
                     <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center font-bold text-black">2</div>
-                    <h3 className="text-xl font-bold text-white">Isi Saldo (Faucet)</h3>
+                    <h3 className="text-xl font-bold text-white">{t.isiSaldo3}</h3>
                 </div>
                 <h3 className="hidden md:block text-2xl font-bold text-white mb-3">{t.step22Title}</h3>
                 <p className="text-slate-400 mb-4">{t.step22Desc}</p>
@@ -97,7 +97,7 @@ export default function GuidePage() {
           <div className="md:flex gap-8 group">
              <div className="hidden md:flex flex-col items-end w-1/3 pt-2 pr-8 border-r-2 border-slate-800 relative">
                 <div className="absolute -right-[9px] top-2 w-4 h-4 bg-amber-500 rounded-full ring-4 ring-[#050505]" />
-                <h3 className="text-xl font-bold text-amber-400">Langkah 04</h3>
+                <h3 className="text-xl font-bold text-amber-400">{t.step444Title}</h3>
              </div>
              <div className="w-full md:w-2/3">
                 <div className="flex items-center gap-3 mb-3 md:hidden">
@@ -108,7 +108,7 @@ export default function GuidePage() {
                 <p className="text-slate-400 mb-4">{t.step4Desc}</p>
                 <div className="flex items-center gap-2 text-amber-500 text-sm font-mono bg-amber-500/10 p-2 rounded w-fit">
                     <DownloadCloud size={16} />
-                    <span>Status: Ready to Upload</span>
+                    <span>{t.statusReady}</span>
                 </div>
              </div>
           </div>
@@ -117,7 +117,7 @@ export default function GuidePage() {
           <div className="md:flex gap-8 group">
              <div className="hidden md:flex flex-col items-end w-1/3 pt-2 pr-8 border-r-2 border-slate-800 relative">
                 <div className="absolute -right-[9px] top-2 w-4 h-4 bg-purple-500 rounded-full ring-4 ring-[#050505]" />
-                <h3 className="text-xl font-bold text-purple-400">Langkah 05 (Penting)</h3>
+                <h3 className="text-xl font-bold text-purple-400">{t.step555Title}</h3>
              </div>
              <div className="w-full md:w-2/3">
                 <div className="flex items-center gap-3 mb-3 md:hidden">
@@ -131,7 +131,7 @@ export default function GuidePage() {
 
                 {/* Visual Aid: Simulasi Link Transaksi */}
                 <div className="bg-[#151515] p-5 rounded-xl border border-purple-500/30">
-                    <div className="text-xs text-slate-500 mb-2 font-bold uppercase tracking-wider">Contoh Tampilan Bukti:</div>
+                    <div className="text-xs text-slate-500 mb-2 font-bold uppercase tracking-wider">{t.simulasip}</div>
                     
                     <div className="space-y-3">
                         <div className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
@@ -157,7 +157,9 @@ export default function GuidePage() {
         
 
 
-        
+        <br></br>
+        <br></br>
+
 
         {/* ... (Kode Langkah 5 di atas biarin aja) ... */}
 
@@ -166,7 +168,7 @@ export default function GuidePage() {
              <div className="hidden md:flex flex-col items-end w-1/3 pt-2 pr-8 border-r-2 border-slate-800 border-dashed relative">
                 {/* Warna Cyan biar beda (Kesan Link/Web) */}
                 <div className="absolute -right-[9px] top-2 w-4 h-4 bg-cyan-400 rounded-full ring-4 ring-[#050505] shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
-                <h3 className="text-xl font-bold text-cyan-400">Langkah 06 (Bonus)</h3>
+                <h3 className="text-xl font-bold text-cyan-400">{t.step6Label}</h3>
              </div>
              <div className="w-full md:w-2/3">
                 <div className="flex items-center gap-3 mb-3 md:hidden">
@@ -182,20 +184,20 @@ export default function GuidePage() {
                 <div className="bg-[#0f172a] p-4 rounded-xl border border-cyan-500/30 relative overflow-hidden group-hover:border-cyan-400/60 transition-colors">
                     <div className="flex items-center gap-2 text-xs text-slate-500 mb-2 font-bold uppercase tracking-wider">
                         <FolderOpen size={14} className="text-cyan-400" />
-                        Rumus Link Kamu:
+                        {t.rumusLink}
                     </div>
                     
                     {/* Kotak URL Simulasi */}
                     <div className="bg-black p-3 rounded-lg border border-slate-700 font-mono text-sm md:text-base break-all flex flex-wrap items-center">
                         <span className="text-slate-500 select-none">https://karsa-chain.vercel.app/</span>
                         <span className="bg-cyan-500/20 text-cyan-300 px-1 rounded border border-cyan-500/30 mx-1">
-                            0x...ALAMAT_KAMU
+                             {t.alamatKamu}
                         </span>
                     </div>
 
                     {/* Contoh Hasil */}
                     <div className="mt-3 text-xs text-slate-400 italic">
-                        *Contoh: karsa-chain.vercel.app/<span className="text-white">0x71C...9A2</span>
+                        karsa-chain.vercel.app/<span className="text-white">0x71C...9A2</span>
                     </div>
                 </div>
              </div>
