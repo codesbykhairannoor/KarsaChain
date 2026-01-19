@@ -4,11 +4,12 @@ import { useState } from "react";
 import { prepareContractCall, ThirdwebClient, ThirdwebContract } from "thirdweb";
 import { useSendTransaction } from "thirdweb/react";
 import { Upload } from "lucide-react";
+import { upload } from "thirdweb/storage"; // Kita ubah importnya jadi di atas biar pasti ke-load
 
 interface UploadFormProps {
   client: ThirdwebClient;
   contract: ThirdwebContract;
-  onSuccess: () => void; // Callback biar Gallery bisa refresh setelah upload
+  onSuccess: () => void;
 }
 
 export default function UploadForm({ client, contract, onSuccess }: UploadFormProps) {
@@ -16,36 +17,62 @@ export default function UploadForm({ client, contract, onSuccess }: UploadFormPr
   const [assetType, setAssetType] = useState("image");
   const [file, setFile] = useState<File | null>(null);
   
-  const { mutate: sendTransaction, isPending } = useSendTransaction();
+  // Kita tambahin error log bawaan hook ini
+  const { mutate: sendTransaction, isPending, error: txError } = useSendTransaction();
 
   const handleUpload = async () => {
+    // 1. Cek Input
+    console.log("LOG 1: Tombol Ditekan");
     if (!title || !file) return alert("Isi judul dan file dulu bro!");
 
     try {
-      // 1. Upload ke IPFS
-      const { upload } = await import("thirdweb/storage");
-      const uri = await upload({ client, files: [file] });
+      // 2. Mulai Upload IPFS
+      console.log("LOG 2: OTW Upload ke IPFS...");
+      
+      // Upload file langsung
+      const uri = await upload({ 
+        client, 
+        files: [file] 
+      });
+      
+      console.log("LOG 3: Upload IPFS Berhasil! URI:", uri);
 
-      // 2. Simpan ke Blockchain
+      // 3. Siapkan Transaksi Blockchain
+      console.log("LOG 4: Menyiapkan Transaksi Blockchain...");
       const transaction = prepareContractCall({
         contract,
         method: "function uploadAsset(string _cid, string _title, string _assetType)",
         params: [uri, title, assetType],
       });
 
+      console.log("LOG 5: Mengirim Request ke Wallet...");
+      
+      // 4. Kirim Transaksi
       sendTransaction(transaction, {
-        onSuccess: () => {
+        onSuccess: (txHash) => {
+          console.log("LOG 6: SUKSES! Hash:", txHash);
           alert("Mantap! Aset berhasil diamankan.");
           setTitle("");
           setFile(null);
-          onSuccess(); // Panggil fungsi refresh
+          onSuccess();
         },
+        onError: (error) => {
+          console.error("LOG ERROR (Tx Failed):", error);
+          alert("Transaksi Ditolak/Gagal: " + error.message);
+        }
       });
-    } catch (err) {
-      console.error(err);
-      alert("Gagal upload bro.");
+
+    } catch (err: any) {
+      // Tangkap Error IPFS atau Error Codingan
+      console.error("LOG ERROR (Catch Block):", err);
+      alert("Terjadi Error Sistem: " + (err.message || err));
     }
   };
+
+  // Tampilkan error di layar kalau hook bermasalah
+  if (txError) {
+    console.error("Hook Error:", txError);
+  }
 
   return (
     <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-3xl backdrop-blur-xl">
@@ -80,8 +107,15 @@ export default function UploadForm({ client, contract, onSuccess }: UploadFormPr
           disabled={isPending}
           className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50"
         >
-          {isPending ? "Sedang Proses..." : "Simpan ke Blockchain"}
+          {isPending ? "Sedang Proses (Cek Console F12)..." : "Simpan ke Blockchain"}
         </button>
+        
+        {/* Tampilkan Error di Layar kalau ada */}
+        {txError && (
+            <p className="text-red-500 text-sm text-center bg-red-900/20 p-2 rounded">
+                Error: {txError.message}
+            </p>
+        )}
       </div>
     </div>
   );

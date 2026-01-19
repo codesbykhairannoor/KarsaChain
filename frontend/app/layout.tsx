@@ -18,7 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* Ini kabel utamanya, harus ngebidang semua children */}
         <ThirdwebProvider>
           {children}
         </ThirdwebProvider>

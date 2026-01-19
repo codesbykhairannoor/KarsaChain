@@ -4,6 +4,7 @@ import { createThirdwebClient, getContract } from "thirdweb";
 import { useActiveAccount } from "thirdweb/react";
 import { sepolia } from "thirdweb/chains";
 import { ConnectButton } from "thirdweb/react";
+import { useState } from "react"; // <--- PENTING: Import ini buat trik refresh tanpa reload
 
 // Import Komponen Kita
 import Navbar from "@/components/Navbar";
@@ -23,6 +24,9 @@ const contract = getContract({
 
 export default function Home() {
   const account = useActiveAccount();
+  
+  // STATE RAHASIA: Ini buat mancing Gallery biar refresh tanpa reload halaman
+  const [refreshKey, setRefreshKey] = useState(0);
 
   return (
     <main className="min-h-screen bg-[#020617] text-slate-200 font-sans pb-20">
@@ -39,19 +43,27 @@ export default function Home() {
           </div>
         ) : (
           /* Tampilan Dashboard Utama */
-          <div>
-            {/* 2. Upload Form Komponen (Passing function reload biar otomatis refresh gallery) */}
+          <div className="space-y-12">
+            
+            {/* 2. Upload Form */}
             <UploadForm 
               client={client} 
               contract={contract} 
-              onSuccess={() => window.location.reload()} 
+              onSuccess={() => {
+                // RAHASIA SUKSES: Kita cuma ubah angka kunci ini, otomatis Galeri sadar ada data baru
+                console.log("Upload beres, trigger refresh galeri...");
+                setRefreshKey((prev) => prev + 1);
+              }} 
             />
 
             {/* 3. Gallery Komponen */}
             <Gallery 
+              key={refreshKey} // <-- Ini saklarnya. Pas angkanya berubah, komponen ini render ulang.
               contract={contract} 
               address={account.address} 
+              client={client} // <-- Passing client biar bisa render gambar cepet
             />
+            
           </div>
         )}
       </div>
