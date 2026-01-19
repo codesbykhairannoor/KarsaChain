@@ -39,14 +39,25 @@ export default function Navbar({ client }: NavbarProps) {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         
         {/* LOGO */}
-        <Link href="/" className="flex items-center gap-2 cursor-pointer group">
-          <div className="w-10 h-10 bg-vault-amber rounded-tl-xl rounded-br-xl flex items-center justify-center font-black text-black italic text-xl group-hover:scale-110 transition-transform">
-            K
-          </div>
-          <h1 className="text-xl font-bold tracking-tighter text-white uppercase">
-            KARSA<span className="text-vault-amber">CHAIN</span>
-          </h1>
-        </Link>
+       <Link href="/" className="flex items-center gap-3 cursor-pointer group">
+  {/* Container Logo */}
+  <div className="w-10 h-10 relative flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+    {/* Kita pakai img standar agar favicon.ico terbaca dengan baik, 
+        v=2 memastikan browser tidak mengambil logo lama dari cache */}
+    <img 
+      src="/favicon.ico?v=2" 
+      alt="KarsaChain Logo" 
+      className="w-full h-full object-contain rounded-lg shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+    />
+  </div>
+
+  {/* Teks Brand */}
+  <h1 className="text-xl font-black tracking-tighter text-white uppercase flex items-center">
+    KARSA<span className="text-vault-amber">CHAIN</span>
+    {/* Aksen titik futuristik setelah teks (opsional, biar makin gahar) */}
+    <span className="w-1 h-1 bg-vault-amber ml-1 rounded-full animate-pulse"></span>
+  </h1>
+</Link>
 
         {/* MENU TENGAH */}
         <div className="flex items-center bg-white/5 border border-white/5 rounded-full p-1.5 gap-1 overflow-x-auto">
