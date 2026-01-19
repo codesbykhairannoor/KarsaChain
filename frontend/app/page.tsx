@@ -1,10 +1,13 @@
 "use client";
 
 import { createThirdwebClient, getContract } from "thirdweb";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, ConnectButton } from "thirdweb/react";
 import { sepolia } from "thirdweb/chains";
-import { ConnectButton } from "thirdweb/react";
-import { useState } from "react"; // <--- PENTING: Import ini buat trik refresh tanpa reload
+import { useState } from "react";
+
+// Import State Management & Kamus
+import { useLanguageStore } from "../lib/store";
+import { translations } from "../lib/translations";
 
 // Import Komponen Kita
 import Navbar from "@/components/Navbar";
@@ -24,9 +27,11 @@ const contract = getContract({
 
 export default function Home() {
   const account = useActiveAccount();
-  
-  // STATE RAHASIA: Ini buat mancing Gallery biar refresh tanpa reload halaman
   const [refreshKey, setRefreshKey] = useState(0);
+
+  // Ambil bahasa yang aktif dari Zustand
+  const { lang } = useLanguageStore();
+  const t = translations[lang]; // Ambil kamus sesuai bahasa (ID/EN)
 
   return (
     <main className="min-h-screen bg-[#020617] text-slate-200 font-sans pb-20">
@@ -35,11 +40,18 @@ export default function Home() {
 
       <div className="max-w-6xl mx-auto px-6 mt-12">
         {!account ? (
-          /* Tampilan Belum Login */
+          /* Tampilan Belum Login - Menggunakan Teks dari Kamus */
           <div className="text-center py-32 border border-dashed border-slate-800 rounded-3xl">
-            <h2 className="text-4xl font-bold text-white mb-4">Vault Masa Depan.</h2>
-            <p className="text-slate-400 mb-8">Koneksikan wallet untuk mengakses brankas digital lo.</p>
-            <ConnectButton client={client} theme="dark" />
+            <h2 className="text-4xl font-bold text-white mb-4">
+              {t.welcome}
+            </h2>
+            <p className="text-slate-400 mb-8">
+              {t.subtitle}
+            </p>
+            {/* Supaya tidak error hydration, ConnectButton dibungkus div biasa */}
+            <div className="inline-block">
+              <ConnectButton client={client} theme="dark" />
+            </div>
           </div>
         ) : (
           /* Tampilan Dashboard Utama */
@@ -50,7 +62,6 @@ export default function Home() {
               client={client} 
               contract={contract} 
               onSuccess={() => {
-                // RAHASIA SUKSES: Kita cuma ubah angka kunci ini, otomatis Galeri sadar ada data baru
                 console.log("Upload beres, trigger refresh galeri...");
                 setRefreshKey((prev) => prev + 1);
               }} 
@@ -58,10 +69,10 @@ export default function Home() {
 
             {/* 3. Gallery Komponen */}
             <Gallery 
-              key={refreshKey} // <-- Ini saklarnya. Pas angkanya berubah, komponen ini render ulang.
+              key={refreshKey} 
               contract={contract} 
               address={account.address} 
-              client={client} // <-- Passing client biar bisa render gambar cepet
+              client={client}
             />
             
           </div>
