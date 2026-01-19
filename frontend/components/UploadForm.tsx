@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { prepareContractCall, ThirdwebClient, ThirdwebContract } from "thirdweb";
 import { useSendTransaction } from "thirdweb/react";
-import { Upload } from "lucide-react";
-import { upload } from "thirdweb/storage"; // Kita ubah importnya jadi di atas biar pasti ke-load
+import { Upload, FileUp, ShieldCheck } from "lucide-react";
+import { upload } from "thirdweb/storage";
+import { useLanguageStore } from "@/lib/store";
+import { translations } from "@/lib/translations";
 
 interface UploadFormProps {
   client: ThirdwebClient;
@@ -17,103 +19,97 @@ export default function UploadForm({ client, contract, onSuccess }: UploadFormPr
   const [assetType, setAssetType] = useState("image");
   const [file, setFile] = useState<File | null>(null);
   
-  // Kita tambahin error log bawaan hook ini
+  const { lang } = useLanguageStore();
+  const t = translations[lang as keyof typeof translations];
+
   const { mutate: sendTransaction, isPending, error: txError } = useSendTransaction();
 
   const handleUpload = async () => {
-    // 1. Cek Input
-    console.log("LOG 1: Tombol Ditekan");
-    if (!title || !file) return alert("Isi judul dan file dulu bro!");
+    if (!title || !file) return alert(t.errorFill);
 
     try {
-      // 2. Mulai Upload IPFS
-      console.log("LOG 2: OTW Upload ke IPFS...");
+      console.log("LOG: Uploading to IPFS...");
+      const uri = await upload({ client, files: [file] });
       
-      // Upload file langsung
-      const uri = await upload({ 
-        client, 
-        files: [file] 
-      });
-      
-      console.log("LOG 3: Upload IPFS Berhasil! URI:", uri);
-
-      // 3. Siapkan Transaksi Blockchain
-      console.log("LOG 4: Menyiapkan Transaksi Blockchain...");
       const transaction = prepareContractCall({
         contract,
         method: "function uploadAsset(string _cid, string _title, string _assetType)",
         params: [uri, title, assetType],
       });
 
-      console.log("LOG 5: Mengirim Request ke Wallet...");
-      
-      // 4. Kirim Transaksi
       sendTransaction(transaction, {
         onSuccess: (txHash) => {
-          console.log("LOG 6: SUKSES! Hash:", txHash);
-          alert("Mantap! Aset berhasil diamankan.");
+          alert(t.successMsg);
           setTitle("");
           setFile(null);
           onSuccess();
         },
         onError: (error) => {
-          console.error("LOG ERROR (Tx Failed):", error);
-          alert("Transaksi Ditolak/Gagal: " + error.message);
+          alert("Error: " + error.message);
         }
       });
-
     } catch (err: any) {
-      // Tangkap Error IPFS atau Error Codingan
-      console.error("LOG ERROR (Catch Block):", err);
-      alert("Terjadi Error Sistem: " + (err.message || err));
+      alert("System Error: " + (err.message || err));
     }
   };
 
-  // Tampilkan error di layar kalau hook bermasalah
-  if (txError) {
-    console.error("Hook Error:", txError);
-  }
-
   return (
-    <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-3xl backdrop-blur-xl">
+    /* Menggunakan bg-vault-card dan border-white/10 agar sinkron dengan globals.css */
+    <div className="bg-vault-card border border-white/10 p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
       <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-        <Upload size={20} className="text-blue-400" /> Upload Aset Baru
+        <Upload size={20} className="text-vault-amber" /> {t.uploadTitle}
       </h3>
+      
       <div className="space-y-4">
         <input 
-          className="w-full bg-black/40 border border-slate-700 rounded-xl p-4 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-          placeholder="Judul Karya / Aset"
+          className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-2 focus:ring-vault-amber outline-none transition-all"
+          placeholder={t.inputPlaceholder}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <div className="flex gap-4">
+        
+        <div className="flex flex-col md:flex-row gap-4">
           <select 
-            className="flex-1 bg-black/40 border border-slate-700 rounded-xl p-4 text-white outline-none"
+            className="flex-1 bg-black/40 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-vault-amber cursor-pointer"
             value={assetType}
             onChange={(e) => setAssetType(e.target.value)}
           >
-            <option value="image">🎨 Gambar</option>
-            <option value="music">🎵 Musik</option>
-            <option value="essay">📄 Dokumen</option>
+            <option value="image" className="bg-zinc-900">{t.typeImage}</option>
+            <option value="music" className="bg-zinc-900">{t.typeMusic}</option>
+            <option value="essay" className="bg-zinc-900">{t.typeDoc}</option>
           </select>
-          <input 
-            type="file" 
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="flex-1 bg-black/40 border border-slate-700 rounded-xl p-3 text-sm text-slate-400"
-          />
+
+          <label className="flex-1 flex items-center justify-between bg-black/40 border border-dashed border-white/20 rounded-xl p-4 cursor-pointer hover:border-vault-amber transition-all group">
+            <span className="text-sm text-zinc-400 truncate w-40">
+              {file ? file.name : "Pilih File..."}
+            </span>
+            <FileUp size={18} className="text-zinc-500 group-hover:text-vault-amber" />
+            <input 
+              type="file" 
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              className="hidden"
+            />
+          </label>
         </div>
+
         <button 
           onClick={handleUpload}
           disabled={isPending}
-          className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50"
+          className="w-full bg-vault-amber hover:bg-yellow-500 text-black font-extrabold py-4 rounded-xl transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
         >
-          {isPending ? "Sedang Proses (Cek Console F12)..." : "Simpan ke Blockchain"}
+          {isPending ? (
+            <div className="flex items-center gap-2">
+                <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                {t.btnProcess}
+            </div>
+          ) : (
+            <><ShieldCheck size={20}/> {t.btnSave}</>
+          )}
         </button>
         
-        {/* Tampilkan Error di Layar kalau ada */}
         {txError && (
-            <p className="text-red-500 text-sm text-center bg-red-900/20 p-2 rounded">
-                Error: {txError.message}
+            <p className="text-red-400 text-xs text-center bg-red-950/30 p-3 rounded-xl border border-red-900/50">
+               ⚠️ {txError.message}
             </p>
         )}
       </div>

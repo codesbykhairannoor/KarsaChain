@@ -1,20 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warna Background & Foreground Utama */
+  --background: #050505; /* Hitam Pekat Vault */
+  --foreground: #E2E8F0;
+  
+  /* Definisi Warna Vault (Biar class bg-vault-amber dkk jalan) */
+  --vault-black: #050505;
+  --vault-card: #111111;
+  --vault-amber: #F59E0B;
+  --vault-gold: #B45309;
 }
 
 @theme inline {
+  /* Daftarkan variabel ke Tailwind v4 agar bisa dipakai di class */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  
+  --color-vault-black: var(--vault-black);
+  --color-vault-card: var(--vault-card);
+  --color-vault-amber: var(--vault-amber);
+  --color-vault-gold: var(--vault-gold);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* Override default dark mode browser agar tetap pakai warna Vault kita */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #050505;
     --foreground: #ededed;
   }
 }
@@ -23,4 +38,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Fix tambahan: Pastikan input & card terlihat rapi tanpa Tailwind config terpisah */
+@layer base {
+  input, select, textarea {
+    background-color: #1A1A1A !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
 }
